@@ -1,7 +1,18 @@
 import React from 'react';
 
+import speedSvg from '../../assets/speed.svg';
+import acceleration from '../../assets/acceleration.svg';
+import force from '../../assets/force.svg';
+import gasoline from '../../assets/gasoline.svg';
+import exchange from '../../assets/exchange.svg';
+import people from '../../assets/people.svg';
+
+
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
+import { Accessory } from '../../components/Accessory';
+import { Button } from '../../components/Button';
+
 
 import * as S from './styles';
 
@@ -29,6 +40,15 @@ export function CardDetails(){
           </S.Rent>
         </S.Details>
 
+        <S.Accessories>
+          <Accessory name="308km/h" icon={speedSvg}/>
+          <Accessory name="3.2s" icon={acceleration}/>
+          <Accessory name="800 HP" icon={force}/>
+          <Accessory name="Gasolina" icon={gasoline}/>
+          <Accessory name="Auto" icon={exchange}/>
+          <Accessory name="2 Ppessoas" icon={people}/>
+        </S.Accessories>
+
         <S.About>
           Este é automóvel desportivo. Surgiu do lendário touro de lide indultado
           na praça Real Maestranza de Sevilla. É um belíssimo carro para quem
@@ -36,6 +56,9 @@ export function CardDetails(){
         </S.About>
       </S.Content>
 
+      <S.Footer>
+        <Button title="Confirmar" />
+      </S.Footer>
     </S.Container>
   );
 };
