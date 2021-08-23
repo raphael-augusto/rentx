@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 import speedSvg from '../../assets/speed.svg';
 import acceleration from '../../assets/acceleration.svg';
@@ -13,14 +14,24 @@ import { ImageSlider } from '../../components/ImageSlider';
 import { Accessory } from '../../components/Accessory';
 import { Button } from '../../components/Button';
 
-
 import * as S from './styles';
 
+type NavigationProps = {
+  navigate: (screen:string) => void;
+}
+
 export function CardDetails(){
+  const navigation = useNavigation<NavigationProps>();
+
+
+  function handleConfirmScheduling() {
+    navigation.navigate('Scheduling');
+  }
+
   return (
     <S.Container>
       <S.Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={() => {}}/>
       </S.Header>
 
       <S.CarImages>
@@ -57,7 +68,7 @@ export function CardDetails(){
       </S.Content>
 
       <S.Footer>
-        <Button title="Confirmar" />
+        <Button title="Escolher período do aluguel" onPress={handleConfirmScheduling}/>
       </S.Footer>
     </S.Container>
   );
