@@ -1,22 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState }from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 
+import { api } from '../../services/api';
+import { CarDTO } from '../../dtos/CarDTO';
 import { Header } from '../../components/Header';
 import { Car } from '../../components/Car';
+import { Load } from '../../components/Load';
+
+
+type NavigationProps = {
+  navigate: (screen:string) => void;
+}
 
 import * as S from './styles';
 
 export function Home(){
-  const carData = {
-    brand: 'AUDI',
-    name: 'RS 5 Caupé',
-    rent:{
-      period: 'AO DIA',
-      price: 120,
-    },
-    thumbnail:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQX9ULlIfz1HDoSSr6atk5wZmFr9nbCTp-kCjrygP6WIeiUu3NB1aQaragDpWKknPScpKI&usqp=CAU'
+  const [cars, setCars] = useState<CarDTO[]>([]);
+  const [loading, setLoading] = useState(true);
+  const navigation = useNavigation<NavigationProps>();
+
+  function handleCarDetails() {
+    navigation.navigate('CardDetails');
   }
 
+  useEffect(()=>{
+    const fetchCars = async () => {
+      try{
+        const response = await api.get('/cars');
+
+        setCars(response.data);
+      }catch(error){
+        console.log(error);
+      }finally{
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  },[]);
 
   return (
     <S.Container >
@@ -27,12 +49,16 @@ export function Home(){
         translucent
       />
       <Header title="Total de carros 12 carros"/>
-
-      <S.CardList
-        data={[1,2,3]}
-        keyExtractor={item => String(item)}
-        renderItem={({item}) => <Car data={carData}/>}
-      />
+      {loading
+      ? <Load />
+      : <S.CardList
+          data={cars}
+          keyExtractor={item => item.id}
+          renderItem={({item}) =>
+            <Car data={item} onPress={handleCarDetails}/>
+          }
+        />
+      }
 
     </S.Container>
   );
