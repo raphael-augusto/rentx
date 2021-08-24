@@ -3,7 +3,7 @@ import React from 'react';
 import * as S from './styles';
 
 interface Props {
-  imagesUrl: string[];
+  imagesUrl:string[];
 }
 
 export function ImageSlider({ imagesUrl }:Props){
@@ -21,7 +21,6 @@ export function ImageSlider({ imagesUrl }:Props){
           source={{uri: imagesUrl[0]}}
           resizeMode="contain"
         />
-
       </S.CarImageWrapper>
 
     </S.Container>
