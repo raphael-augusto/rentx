@@ -8,9 +8,12 @@ import { Header } from '../../components/Header';
 import { Car } from '../../components/Car';
 import { Load } from '../../components/Load';
 
+interface Params {
+  car: CarDTO;
+}
 
 type NavigationProps = {
-  navigate: (screen:string) => void;
+  navigate: (screen: string, params: Params) => void;
 }
 
 import * as S from './styles';
@@ -20,8 +23,8 @@ export function Home(){
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation<NavigationProps>();
 
-  function handleCarDetails() {
-    navigation.navigate('CardDetails');
+  function handleCarDetails(car: CarDTO) {
+    navigation.navigate('CardDetails', { car });
   }
 
   useEffect(()=>{
@@ -55,7 +58,7 @@ export function Home(){
           data={cars}
           keyExtractor={item => item.id}
           renderItem={({item}) =>
-            <Car data={item} onPress={handleCarDetails}/>
+            <Car data={item} onPress={()=>handleCarDetails(item)}/>
           }
         />
       }
