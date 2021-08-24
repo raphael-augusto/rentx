@@ -14,8 +14,5 @@ export interface CarDTO {
       type: string;
       name: string;
     }[];
-  photos: {
-    id: string;
-    photo: string;
-  }[]
+  photos: string[];
 }
