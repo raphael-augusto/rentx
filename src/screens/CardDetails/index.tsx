@@ -10,9 +10,14 @@ import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
 
 import * as S from './styles';
 
+interface Params {
+  car: CarDTO;
+}
+
 
 type NavigationProps = {
-  navigate: (screen:string) => void;
+  navigate: (screen: string, params: Params) => void;
+  goBack: () => void;
 }
 interface Params {
   car: CarDTO;
@@ -24,12 +29,13 @@ export function CardDetails(){
   const { car } = route.params as Params;
 
   function handleConfirmScheduling() {
-    navigation.navigate('Scheduling');
+    navigation.navigate('Scheduling', { car });
   }
 
-  function handleBackScreen() {
-    navigation.navigate('Home');
+ function handleBackScreen() {
+    navigation.goBack();
   }
+
 
   return (
     <S.Container>
