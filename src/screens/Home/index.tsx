@@ -7,6 +7,7 @@ import { CarDTO } from '../../dtos/CarDTO';
 import { Header } from '../../components/Header';
 import { Car } from '../../components/Car';
 import { Load } from '../../components/Load';
+import {ConfirmButton} from '../../components/ConfirmButton'
 
 interface Params {
   car: CarDTO;
@@ -14,6 +15,7 @@ interface Params {
 
 type NavigationProps = {
   navigate: (screen: string, params: Params) => void;
+  goBack: () => void;
 }
 
 import * as S from './styles';
@@ -62,7 +64,6 @@ export function Home(){
           }
         />
       }
-
     </S.Container>
   );
 };
