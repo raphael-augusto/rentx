@@ -18,7 +18,7 @@ interface Params {
 }
 
 type NavigationProps = {
-  navigate: (screen: string, params: Params) => void;
+  navigate: (screen: string, params?: Params) => void;
   goBack: () => void;
 }
 
@@ -33,7 +33,7 @@ export function Home(){
   }
 
   function handleMyCars() {
-    navigation.navigate('MyCars', { });
+    navigation.navigate('MyCars');
   }
 
   useEffect(()=>{
@@ -60,7 +60,7 @@ export function Home(){
         backgroundColor="transparent"
         translucent
       />
-      <Header title="Total de carros 12 carros"/>
+      <Header title={`Total de ${cars.length} carros`} />
       {loading
       ? <Load />
       : <S.CardList
