@@ -1,30 +1,22 @@
 import React, { useState }from 'react';
 import { StatusBar } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import { format } from 'date-fns';
 
-import { CarDTO } from '../../dtos/CarDTO';
 import { getPlatformDate } from '../../utils/getPlatformDate';
 import { BackButton } from '../../components/BackButton';
 import { Calendar, DayProps, GenerateInterval, MarkedDateProps} from '../../components/Calendar';
 import { Button } from '../../components/Button';
+import { RootStackParams } from '../../routes/RootStackParams';
 
 import ArrowSvg from '../../assets/arrow.svg';
 
 import * as S from './styles';
 
 
+type RoutesProps=RouteProp<RootStackParams, 'Scheduling'>
 
-interface Params {
-  car: CarDTO;
-  dates:string[];
-}
-
-type NavigationProps = {
-  navigate: (screen: string, params: Params) => void;
-  goBack: () => void;
-}
 
 interface RentalPeriod {
   startFormatted: string;
@@ -36,14 +28,14 @@ export function Scheduling(){
   const [markedDates, setMarkedDates] = useState<MarkedDateProps>( {} as MarkedDateProps );
   const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>( {} as RentalPeriod );
 
-  const navigation = useNavigation<NavigationProps>();
-  const route = useRoute();
-  const { car } = route.params as Params;
+  const navigation = useNavigation();
+  const { params } = useRoute<RoutesProps>();
+  const { carDTO } = params;
 
   const theme = useTheme();
 
   function handleConfirmRental() {
-    navigation.navigate('SchedulingDetails', { car , dates: Object.keys(markedDates) });
+    navigation.navigate('SchedulingDetails', { carDTO, dates: Object.keys(markedDates) });
   }
 
   function handleBackScreen() {

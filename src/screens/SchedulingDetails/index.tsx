@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import { format } from 'date-fns';
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
-
-
-
-import speedSvg from '../../assets/speed.svg';
-import acceleration from '../../assets/acceleration.svg';
-import force from '../../assets/force.svg';
-import gasoline from '../../assets/gasoline.svg';
-import exchange from '../../assets/exchange.svg';
-import people from '../../assets/people.svg';
 
 import { api } from '../../services/api';
 import { getPlatformDate } from '../../utils/getPlatformDate';
@@ -23,20 +14,12 @@ import { ImageSlider } from '../../components/ImageSlider';
 import { Accessory } from '../../components/Accessory';
 import { Button } from '../../components/Button';
 
-import { CarDTO } from '../../dtos/CarDTO';
+import { RootStackParams } from '../../routes/RootStackParams';
 
 import * as S from './styles';
 
 
-interface Params {
-  car: CarDTO;
-  dates: string[];
-}
-
-type NavigationProps = {
-  navigate: (screen:string) => void;
-  goBack: () => void;
-}
+type RoutesProps=RouteProp<RootStackParams, 'SchedulingDetails'>
 
 interface RentalPeriod {
   startFormatted: string;
@@ -48,14 +31,14 @@ export function SchedulingDetails(){
   const [loading, setLoading] = useState(false);
   const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>( {} as RentalPeriod );
 
-  const navigation = useNavigation<NavigationProps>();
-  const route = useRoute();
-  const { car, dates } = route.params as Params;
+  const navigation = useNavigation();
+  const { params } = useRoute<RoutesProps>();
+  const { carDTO , dates} = params;
 
   const theme = useTheme();
 
   async function handleConfirm() {
-    const shedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+    const shedulesByCar = await api.get(`/schedules_bycars/${carDTO.id}`);
     const unavailable_dates = [
       ...shedulesByCar.data.unavailable_dates,
       ...dates,
@@ -67,14 +50,14 @@ export function SchedulingDetails(){
     /** MY CAR */
     await api.post('schedules_byuser', {
       user_id: 1,
-      car,
+      carDTO,
       startDate: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
       endDate: format(getPlatformDate(new Date(dates[dates.length -1])), 'dd/MM/yyyy'),
     })
 
     /** ADD  DATE CAR */
-    api.put(`/schedules_bycars/${car.id}`,{
-      id: car.id,
+    api.put(`/schedules_bycars/${carDTO.id}`,{
+      id: carDTO.id,
       unavailable_dates
     })
     .then(() => {navigation.navigate('SchedulingComplete')})
@@ -88,7 +71,7 @@ export function SchedulingDetails(){
     navigation.goBack();
   }
 
-  const rentTotal = Number(dates.length * car.rent.price)
+  const rentTotal = Number(dates.length * carDTO.rent.price)
 
   useEffect(()=>{
     setRentalPeriod({
@@ -104,25 +87,25 @@ export function SchedulingDetails(){
       </S.Header>
 
       <S.CarImages>
-        <ImageSlider imagesUrl={car.photos}/>
+        <ImageSlider imagesUrl={carDTO.photos}/>
       </S.CarImages>
 
       <S.Content>
         <S.Details>
           <S.Description>
-            <S.Brand>{car.brand}</S.Brand>
-            <S.Name>{car.name}</S.Name>
+            <S.Brand>{carDTO.brand}</S.Brand>
+            <S.Name>{carDTO.name}</S.Name>
           </S.Description>
 
           <S.Rent>
-            <S.Period>{car.rent.period}</S.Period>
-            <S.Price>R$ {car.rent.price}</S.Price>
+            <S.Period>{carDTO.rent.period}</S.Period>
+            <S.Price>R$ {carDTO.rent.price}</S.Price>
           </S.Rent>
         </S.Details>
 
         <S.Accessories>
         {
-          car.accessories.map(accessory => (
+          carDTO.accessories.map(accessory => (
             <Accessory
               key={accessory.type}
               name={accessory.name}
@@ -162,7 +145,7 @@ export function SchedulingDetails(){
           <S.RentalPriceLabel>TOTAL</S.RentalPriceLabel>
 
           <S.RentalPriceDetails>
-            <S.RentalPriceQuota>{`R$ ${car.rent.price}  x${dates.length} diárias`}</S.RentalPriceQuota>
+            <S.RentalPriceQuota>{`R$ ${carDTO.rent.price}  x${dates.length} diárias`}</S.RentalPriceQuota>
             <S.RentalPriceTotal>R$ {rentTotal}</S.RentalPriceTotal>
           </S.RentalPriceDetails>
         </S.RentalPrice>

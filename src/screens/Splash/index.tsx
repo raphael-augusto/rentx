@@ -4,14 +4,14 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolate, Ex
 import BrandSvg from '../../assets/brand.svg';
 import LogoPng from '../../assets/logo.svg';
 
+
 import * as S from './styles';
 
-type NavigationProps = {
-  navigate: (screen: string) => void;
-}
+
+
 export function Splash(){
   const splashAnimation = useSharedValue(0);
-  const navigation = useNavigation<NavigationProps>();
+  const navigation = useNavigation();
 
   const brandStyle = useAnimatedStyle(() => {
     return{

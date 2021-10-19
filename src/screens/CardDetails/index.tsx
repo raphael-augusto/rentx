@@ -11,34 +11,22 @@ import Animated, {
   useSharedValue
 } from 'react-native-reanimated';
 
-
-import { CarDTO } from '../../dtos/CarDTO';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import { Accessory } from '../../components/Accessory';
 import { Button } from '../../components/Button';
 import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
+import { RouteProp } from '@react-navigation/native';
+import { RootStackParams } from '../../routes/RootStackParams';
 
 import * as S from './styles';
 
-
-interface Params {
-  car: CarDTO;
-}
-
-
-type NavigationProps = {
-  navigate: (screen: string, params: Params) => void;
-  goBack: () => void;
-}
-interface Params {
-  car: CarDTO;
-}
+type RoutesProps=RouteProp<RootStackParams, 'CardDetails'>
 
 export function CardDetails(){
-  const navigation = useNavigation<NavigationProps>();
-  const route = useRoute();
-  const { car } = route.params as Params;
+  const navigation = useNavigation();
+  const { params } = useRoute<RoutesProps>();
+  const { carDTO } = params;
   const theme = useTheme();
 
   const scrollY = useSharedValue(0);
@@ -70,7 +58,7 @@ export function CardDetails(){
   });
 
   function handleConfirmScheduling() {
-    navigation.navigate('Scheduling', { car });
+    navigation.navigate('Scheduling',{carDTO});
   };
 
  function handleBackScreen() {
@@ -101,7 +89,7 @@ export function CardDetails(){
           </S.Header>
 
           <S.CarImages>
-            <ImageSlider imagesUrl={car.photos}/>
+            <ImageSlider imagesUrl={carDTO.photos}/>
           </S.CarImages>
         </Animated.View>
       </Animated.View>
@@ -117,19 +105,19 @@ export function CardDetails(){
       >
         <S.Details>
           <S.Description>
-            <S.Brand>{car.brand}</S.Brand>
-            <S.Name>{car.name}</S.Name>
+            <S.Brand>{carDTO.brand}</S.Brand>
+            <S.Name>{carDTO.name}</S.Name>
           </S.Description>
 
           <S.Rent>
-            <S.Period>{car.rent.period}</S.Period>
-            <S.Price>R$ {car.rent.price}</S.Price>
+            <S.Period>{carDTO.rent.period}</S.Period>
+            <S.Price>R$ {carDTO.rent.price}</S.Price>
           </S.Rent>
         </S.Details>
 
         <S.Accessories>
         {
-          car.accessories.map(accessory => (
+          carDTO.accessories.map(accessory => (
             <Accessory
               key={accessory.type}
               name={accessory.name}
@@ -139,7 +127,7 @@ export function CardDetails(){
         }
         </S.Accessories>
 
-        <S.About>{car.about}</S.About>
+        <S.About>{carDTO.about}</S.About>
       </Animated.ScrollView>
 
       <S.Footer>

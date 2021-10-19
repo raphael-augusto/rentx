@@ -1,5 +1,5 @@
 import React, { useEffect, useState }from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StatusBar, StyleSheet, BackHandler } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
@@ -17,24 +17,20 @@ import { Header } from '../../components/Header';
 import { Car } from '../../components/Car';
 import { Load } from '../../components/Load';
 
+
 import * as S from './styles';
+
 
 /** Component Button My Cars */
 const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
 
-interface Params {
-  car: CarDTO;
-}
-
-type NavigationProps = {
-  navigate: (screen: string, params?: Params) => void;
-  goBack: () => void;
-}
+// type RoutesProps=RouteProp<RootStackParams, 'Home'>
 
 export function Home(){
   const [cars, setCars] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigation = useNavigation<NavigationProps>();
+  const navigation = useNavigation();
+
   const theme = useTheme();
 
   const positionY = useSharedValue(0);
@@ -65,7 +61,7 @@ export function Home(){
   });
 
   function handleCarDetails(car: CarDTO) {
-    navigation.navigate('CardDetails', { car });
+    navigation.navigate('CardDetails', { carDTO: car });
   };
 
   function handleMyCars() {

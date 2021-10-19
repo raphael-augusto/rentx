@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar, FlatList } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons'
 import { useTheme } from 'styled-components';
 
@@ -10,11 +10,8 @@ import { BackButton } from '../../components/BackButton';
 import { Car } from '../../components/Car';
 import { LoadAnimation } from '../../components/LoadAnimation';
 
-import * as S from './styles';
 
-type NavigationProps = {
-  goBack: () => void;
-}
+import * as S from './styles';
 
 interface CarProps {
   id: string;
@@ -27,10 +24,7 @@ interface CarProps {
 export function MyCars(){
   const [cars, setCars] = useState<CarProps[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const navigation = useNavigation<NavigationProps>();
-  const route = useRoute();
-
+  const navigation = useNavigation();
   const theme = useTheme();
 
   /**LIST - CARS USER */

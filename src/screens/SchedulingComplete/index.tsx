@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useWindowDimensions, StatusBar } from 'react-native';
 
 import LogoSvg from '../../assets/logo_background_gray.svg';
@@ -10,14 +10,10 @@ import { ConfirmButton } from '../../components/ConfirmButton';
 
 import * as S from './styles';
 
-type NavigationProps = {
-  navigate: (screen:string) => void;
-}
 
 export function SchedulingComplete(){
-  const navigation = useNavigation<NavigationProps>();
+  const navigation = useNavigation();
   const { width } = useWindowDimensions();
-
 
 function handleConfirmCard() {
   navigation.navigate('Home');
