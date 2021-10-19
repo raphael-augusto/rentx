@@ -1,6 +1,6 @@
 import React from "react";
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Home } from '../screens/Home';
 import { CardDetails } from '../screens/CardDetails';
@@ -9,8 +9,10 @@ import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { SchedulingComplete } from '../screens/SchedulingComplete';
 import { MyCars } from '../screens/MyCars';
 import { Splash } from '../screens/Splash';
+import { RootStackParams } from "./RootStackParams";
 
-const { Navigator, Screen } = createNativeStackNavigator();
+const { Navigator, Screen } = createNativeStackNavigator<RootStackParams>();
+export type StackRouteProps =NativeStackNavigationProp<RootStackParams>
 
 export function StackRoutes() {
   return(
