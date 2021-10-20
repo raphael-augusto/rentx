@@ -2,6 +2,7 @@ import { CarDTO } from '../dtos/CarDTO';
 
 export type RootStackParams={
   Splash: undefined;
+  SignIn: undefined;
   Home: undefined;
   CardDetails: { carDTO: CarDTO };
   Scheduling: { carDTO: CarDTO };
