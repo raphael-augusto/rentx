@@ -60,7 +60,13 @@ export function SchedulingDetails(){
       id: carDTO.id,
       unavailable_dates
     })
-    .then(() => {navigation.navigate('SchedulingComplete')})
+    .then(() => {navigation.navigate('Confirmation', {
+      confirmationDTO: {
+        title: 'Carro Alugado!',
+        message:`Agora você só precisa ir\naté a concessionária da RENTX\npegar o seu automóvel.`,
+        nextScreenRoute:'Home',
+      }
+    })})
     .catch(() => {
       setLoading(false);
       Alert.alert('Não foi possível confirmar o agendamento.')
