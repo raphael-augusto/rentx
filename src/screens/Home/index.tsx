@@ -1,15 +1,6 @@
 import React, { useEffect, useState }from 'react';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { StatusBar, StyleSheet, BackHandler } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from 'styled-components';
-import Animated,{
-  useSharedValue,
-  useAnimatedStyle,
-  useAnimatedGestureHandler,
-  withSpring
-} from 'react-native-reanimated';
-import { RectButton, PanGestureHandler } from 'react-native-gesture-handler';
+import {  useNavigation } from '@react-navigation/native';
+import { StatusBar,  BackHandler } from 'react-native';
 
 import { api } from '../../services/api';
 import { CarDTO } from '../../dtos/CarDTO';
@@ -20,18 +11,42 @@ import { Load } from '../../components/Load';
 
 import * as S from './styles';
 
-
 /** Component Button My Cars */
-const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
-
-// type RoutesProps=RouteProp<RootStackParams, 'Home'>
+//const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
 
 export function Home(){
   const [cars, setCars] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
-  const theme = useTheme();
+  function handleCarDetails(car: CarDTO) {
+    navigation.navigate('CardDetails', { carDTO: car });
+  };
+
+  useEffect(()=>{
+    const fetchCars = async () => {
+      try{
+        const response = await api.get('/cars');
+
+        setCars(response.data);
+      }catch(error){
+        console.log(error);
+      }finally{
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  },[]);
+
+  /** Don't go back to the home screen Android*/
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () =>{
+      return true;
+    })
+  },[]);
+
+  /** Component Animation Exemple
 
   const positionY = useSharedValue(0);
   const positionX = useSharedValue(0);
@@ -60,36 +75,10 @@ export function Home(){
     }
   });
 
-  function handleCarDetails(car: CarDTO) {
-    navigation.navigate('CardDetails', { carDTO: car });
-  };
-
   function handleMyCars() {
     navigation.navigate('MyCars');
   };
-
-  useEffect(()=>{
-    const fetchCars = async () => {
-      try{
-        const response = await api.get('/cars');
-
-        setCars(response.data);
-      }catch(error){
-        console.log(error);
-      }finally{
-        setLoading(false);
-      }
-    };
-
-    fetchCars();
-  },[]);
-
-  /** Don't go back to the home screen Android*/
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () =>{
-      return true;
-    })
-  },[]);
+  */
 
   return (
     <S.Container >
@@ -113,7 +102,7 @@ export function Home(){
             }
           />
       }
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
+      {/* <PanGestureHandler onGestureEvent={onGestureEvent}>
         <Animated.View style={[
           myCarButtonStyle,
           {
@@ -133,17 +122,17 @@ export function Home(){
             />
           </ButtonAnimated>
         </Animated.View>
-      </PanGestureHandler>
+      </PanGestureHandler> */}
     </S.Container>
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-})
+// const styles = StyleSheet.create({
+//   button: {
+//     width: 60,
+//     height: 60,
+//     borderRadius: 30,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+// })
