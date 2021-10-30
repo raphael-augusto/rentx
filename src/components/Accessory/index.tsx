@@ -11,7 +11,7 @@ interface Props {
 export function Accessory({ name, icon: Icon }:Props){
   return (
     <S.Container>
-      <Icon width={32} height={32} />
+      <Icon width={32} height={32} fill="#47474D"/>
       <S.Name>{name}</S.Name>
     </S.Container>
   );
