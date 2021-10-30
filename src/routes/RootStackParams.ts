@@ -9,6 +9,8 @@ export type RootStackParams={
   SignUpFirstStep: undefined;
   SignUpSecondStep: { userDTO: UserDTO };
   Home: undefined;
+  Profile: undefined;
+  App: undefined;
   CardDetails: { carDTO: CarDTO };
   Scheduling: { carDTO: CarDTO };
   SchedulingDetails: { carDTO: CarDTO; dates:string[]};
