@@ -110,8 +110,8 @@ export function CardDetails(){
           </S.Description>
 
           <S.Rent>
-            <S.Period>{carDTO.rent.period}</S.Period>
-            <S.Price>R$ {carDTO.rent.price}</S.Price>
+            <S.Period>{carDTO.period}</S.Period>
+            <S.Price>R$ {carDTO.price}</S.Price>
           </S.Rent>
         </S.Details>
 
