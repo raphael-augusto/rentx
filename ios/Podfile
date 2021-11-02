@@ -10,6 +10,10 @@ target 'rentx' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  # NOTE: Do not remove, needed to keep WatermelonDB compiling:
+  pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi', :modular_headers => true
+
+
   # Uncomment to opt-in to using Flipper
   #
   # if !ENV['CI']
