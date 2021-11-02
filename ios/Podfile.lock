@@ -334,6 +334,9 @@ PODS:
     - UMCore
   - UMTaskManagerInterface (6.2.0):
     - UMCore
+  - WatermelonDB (0.22.0):
+    - React
+    - React-jsi
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -386,6 +389,7 @@ DEPENDENCIES:
   - "UMCore (from `../node_modules/@unimodules/core/ios`)"
   - "UMReactNativeAdapter (from `../node_modules/@unimodules/react-native-adapter/ios`)"
   - UMTaskManagerInterface (from `../node_modules/unimodules-task-manager-interface/ios`)
+  - "WatermelonDB (from `../node_modules/@nozbe/watermelondb`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -488,6 +492,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@unimodules/react-native-adapter/ios"
   UMTaskManagerInterface:
     :path: "../node_modules/unimodules-task-manager-interface/ios"
+  WatermelonDB:
+    :path: "../node_modules/@nozbe/watermelondb"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -541,8 +547,9 @@ SPEC CHECKSUMS:
   UMCore: 2f671796d7439604a1cf8ac7bbe5809cd5c50437
   UMReactNativeAdapter: f808906d586a16cebdc3844d86e1bdb8f114a873
   UMTaskManagerInterface: 2be431101b73604e64fbfffcf759336f9d8fccbb
+  WatermelonDB: 1da309a2b3fe35360e92f5a6bda2156543447955
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
-PODFILE CHECKSUM: 92cadfc2af87357a80c5adfad47d9aae11f06c7f
+PODFILE CHECKSUM: d5d8f25df035fda709d61c885ed67feabc273d81
 
 COCOAPODS: 1.10.1
