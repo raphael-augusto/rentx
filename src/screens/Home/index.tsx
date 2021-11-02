@@ -24,19 +24,30 @@ export function Home(){
   };
 
   useEffect(()=>{
+    let isMounted = true;
+
     const fetchCars = async () => {
       try{
         const response = await api.get('/cars');
 
-        setCars(response.data);
+        if(isMounted){
+          setCars(response.data);
+        };
+
       }catch(error){
         console.log(error);
       }finally{
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        };
       }
     };
 
     fetchCars();
+    /* Clean function */
+    return () => {
+      isMounted = false;
+    };
   },[]);
 
   /** Don't go back to the home screen Android*/
