@@ -2,22 +2,22 @@ import React, {
   createContext,
   useState,
   useContext,
-  ReactNode
+  ReactNode,
+  useEffect
 } from 'react';
 
 import { api } from '../services/api';
+import { database } from '../database';
+import { User as ModelUser } from '../database/model/User';
 
 interface User {
   id: string;
+  user_id: string;
   email: string;
   name: string;
   driver_license: string;
   avatar: string;
-}
-
-interface AuthState {
   token: string;
-  user: User;
 }
 
 interface SignInCredentials {
@@ -37,7 +37,7 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children } : AuthProviderProps) {
-  const [data, setData] = useState<AuthState>({} as AuthState);
+  const [data, setData] = useState<User>({} as User);
 
   async function signIn({ email, password } : SignInCredentials) {
     try{
@@ -49,17 +49,46 @@ function AuthProvider({ children } : AuthProviderProps) {
       const { token, user } = response.data;
       api.defaults.headers.authorization = `Bearer ${token}`;
 
-      setData({ user, token });
+      const userColletion = database.get<ModelUser>('users');
+      await database.action(async() =>{
+        await userColletion.create(( newUser ) => {
+          newUser.user_id = user.id,
+          newUser.name = user.name,
+          newUser.email = user.email,
+          newUser.driver_license = user.driver_license,
+          newUser.avatar = user.avatar,
+          newUser.token = token
+        });
+      });
+
+      setData({ ...user, token });
 
     }catch(error){
       throw new Error(String(error));
     }
   }
 
+  useEffect(() => {
+    async function loadUserData() {
+      const userColletion = database.get<ModelUser>('users');
+      const response  = await userColletion.query().fetch();
+
+      if (response.length > 0) {
+        const userData = response[0]._raw as unknown as User;
+        api.defaults.headers.authorization = `Bearer ${userData.token}`;
+        console.log("### USUÁRIO LOGADO ###");
+
+        setData(userData);
+      }
+    }
+
+    loadUserData();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
-        user: data.user,
+        user: data,
         signIn
 
       }}
