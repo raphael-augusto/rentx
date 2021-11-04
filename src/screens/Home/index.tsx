@@ -1,6 +1,7 @@
 import React, { useEffect, useState }from 'react';
 import {  useNavigation } from '@react-navigation/native';
-import { StatusBar,  BackHandler } from 'react-native';
+import { StatusBar,  BackHandler, Alert } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import { api } from '../../services/api';
 import { CarDTO } from '../../dtos/CarDTO';
@@ -17,6 +18,7 @@ import * as S from './styles';
 export function Home(){
   const [cars, setCars] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
+  const netInfo = useNetInfo();
   const navigation = useNavigation();
 
   function handleCarDetails(car: CarDTO) {
@@ -56,6 +58,14 @@ export function Home(){
       return true;
     })
   },[]);
+
+  useEffect(() => {
+    if(netInfo.isConnected){
+      Alert.alert('Você está On-Line');
+    }else{
+      Alert.alert('Você está Of-Line');
+    }
+  },[netInfo.isConnected]);
 
   /** Component Animation Exemple
 
