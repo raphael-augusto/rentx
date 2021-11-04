@@ -28,6 +28,8 @@ interface SignInCredentials {
 interface AuthContextData {
   user: User;
   signIn: (credentials: SignInCredentials) => Promise<void>;
+  signOut: () => Promise<void>;
+  updatedUser: (user: User) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -66,7 +68,42 @@ function AuthProvider({ children } : AuthProviderProps) {
     }catch(error){
       throw new Error(String(error));
     }
-  }
+  };
+
+  async function signOut() {
+    try {
+      const userCollection = database.get<ModelUser>('users');
+
+      await database.action(async () => {
+        const userSelected = await userCollection.find(data.id);
+        await userSelected.destroyPermanently();
+      });
+      console.log("### USUÁRIO DESLOGADO ###");
+
+      setData({} as User);
+    } catch (error) {
+      throw new Error(String(error));
+    }
+  };
+
+  async function updatedUser(user: User) {
+    try {
+      const userColletion = database.get<ModelUser>('users');
+      await database.action(async () => {
+        const userSelected = await userColletion.find(user.id);
+        await userSelected.update((userData) => {
+          userData.name = user.name,
+          userData.driver_license = user.driver_license,
+          userData.avatar= user.avatar
+        });
+      })
+
+      setData(user);
+
+    } catch (error) {
+      throw new Error(String(error));
+    };
+  };
 
   useEffect(() => {
     async function loadUserData() {
@@ -79,18 +116,19 @@ function AuthProvider({ children } : AuthProviderProps) {
         console.log("### USUÁRIO LOGADO ###");
 
         setData(userData);
-      }
-    }
+      };
+    };
 
     loadUserData();
-  }, []);
+  });
 
   return (
     <AuthContext.Provider
       value={{
         user: data,
-        signIn
-
+        signIn,
+        signOut,
+        updatedUser
       }}
     >
       {children}
