@@ -1,7 +1,5 @@
-import { CarDTO } from '../dtos/CarDTO';
 import { UserDTO } from '../dtos/UserDTO';
 import { ConfirmationDTO } from '../dtos/ConfirmationDTO';
-
 
 export type RootStackParams={
   Splash: undefined;
@@ -11,9 +9,9 @@ export type RootStackParams={
   Home: undefined;
   Profile: undefined;
   App: undefined;
-  CardDetails: { carDTO: CarDTO };
-  Scheduling: { carDTO: CarDTO };
-  SchedulingDetails: { carDTO: CarDTO; dates:string[]};
+  CardDetails: { carId: string };
+  Scheduling: { carId: string  };
+  SchedulingDetails: { carId: string; dates:string[]};
   Confirmation: { confirmationDTO: ConfirmationDTO };
   MyCars: undefined;
 }

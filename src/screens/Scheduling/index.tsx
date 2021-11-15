@@ -1,9 +1,11 @@
-import React, { useState }from 'react';
+import React, { useEffect, useState }from 'react';
 import { StatusBar } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import { format } from 'date-fns';
 
+import { database } from '../../database';
+import { Car as ModelCar} from '../../database/model/Car';
 import { getPlatformDate } from '../../utils/getPlatformDate';
 import { BackButton } from '../../components/BackButton';
 import { Calendar, DayProps, GenerateInterval, MarkedDateProps} from '../../components/Calendar';
@@ -24,18 +26,19 @@ interface RentalPeriod {
 }
 
 export function Scheduling(){
+  const [car , setCar] = useState<ModelCar>({} as ModelCar);
   const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>( {} as DayProps );
   const [markedDates, setMarkedDates] = useState<MarkedDateProps>( {} as MarkedDateProps );
   const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>( {} as RentalPeriod );
 
   const navigation = useNavigation();
   const { params } = useRoute<RoutesProps>();
-  const { carDTO } = params;
+  const { carId } = params;
 
   const theme = useTheme();
 
   function handleConfirmRental() {
-    navigation.navigate('SchedulingDetails', { carDTO, dates: Object.keys(markedDates) });
+    navigation.navigate('SchedulingDetails', { carId, dates: Object.keys(markedDates) });
   }
 
   function handleBackScreen() {
@@ -64,6 +67,28 @@ export function Scheduling(){
       endFormatted: format(getPlatformDate(new Date(endDate)), 'dd/MM/yyyy'),
     });
   }
+
+
+  const getCarById = async (id: string) => {
+    try{
+      const carColletion = database.get<ModelCar>('cars');
+      const cars = await carColletion.query().fetch();
+
+      const findCar = cars.find(car => car.id === carId);
+
+      if (!findCar) return;
+
+      setCar(findCar);
+
+    }catch(error){
+      console.log(error);
+    };
+  };
+
+
+  useEffect(()=>{
+    getCarById(carId);
+  },[])
 
   return (
     <S.Container>
